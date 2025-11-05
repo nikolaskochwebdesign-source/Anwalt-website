@@ -15,14 +15,31 @@ export function Contact() {
     message: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
-    console.log("Form submitted:", formData)
+    try {
+      const response = await fetch("https://formspree.io/f/movpgejn", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        alert("✅ Nachricht erfolgreich gesendet!")
+        setFormData({ name: "", email: "", message: "" })
+      } else {
+        alert("❌ Fehler beim Senden der Nachricht. Bitte versuchen Sie es erneut.")
+      }
+    } catch (error) {
+      console.error("Fehler beim Senden:", error)
+      alert("⚠️ Unerwarteter Fehler. Bitte später erneut versuchen.")
+    }
   }
 
   return (
-    <section id="contact" className="py-12 md:py-20 bg-muted/30">
+    <section id="contactformular" className="py-12 md:py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
